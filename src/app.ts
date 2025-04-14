@@ -22,33 +22,47 @@ export class App {
         for (let userId = 1; userId <= userCount; userId++) {
             let currentTime = baseTime
 
-            // Signup flow
-            await this.createEvent(userId, currentTime, "Auth", "Signup", "Home", "SignupCTA")
+            // Initial signup using login flow (since SignupCTA is in elements)
+            await this.createEvent(userId, currentTime, "Auth", "Login", "Home", "SignupCTA")
             currentTime += this.getRandomDelay(1, 2)
 
-            // Initial profile setup
+            // Set up profile immediately after signup
             await this.createEvent(userId, currentTime, "ProfileUpdate", "Personalization", "Profile", "UpdateProfileBtn")
             currentTime += this.getRandomDelay(2, 4)
 
-            // Browse through main sections
-            await this.createEvent(userId, currentTime, "Engagement", "VenueSearch", "Home", "SearchBar")
+            // Start browsing from home page
+            await this.createEvent(userId, currentTime, "Search", "VenueSearch", "Home", "SearchBar")
+            currentTime += this.getRandomDelay(1, 2)
+
+            // Apply sports filter
+            await this.createEvent(userId, currentTime, "Search", "VenueSearch", "SearchResults", "FilterBySport")
             currentTime += this.getRandomDelay(1, 3)
 
-            // View multiple venues (2-5)
-            const venuesToView = Math.floor(Math.random() * 4) + 2
+            // Browse multiple venues (2-4)
+            const venuesToView = Math.floor(Math.random() * 3) + 2
             for (let i = 0; i < venuesToView; i++) {
-                await this.createEvent(userId, currentTime, "Search", "VenueSearch", "SearchResults", "FilterBySport")
-                currentTime += this.getRandomDelay(1, 2)
-
-                await this.createEvent(userId, currentTime, "Engagement", "VenueSearch", "VenueDetails", "ViewVenue")
+                // View venue details
+                await this.createEvent(userId, currentTime, "Engagement", "VenueSearch", "VenueDetails", "BookNowButton")
                 currentTime += this.getRandomDelay(2, 4)
+
+                // 30% chance to go back to search and filter
+                if (Math.random() < 0.3) {
+                    await this.createEvent(userId, currentTime, "Search", "VenueSearch", "SearchResults", "FilterBySport")
+                    currentTime += this.getRandomDelay(1, 2)
+                }
             }
 
-            // Profile updates (1-3 times)
-            const profileUpdates = Math.floor(Math.random() * 3) + 1
+            // 50% chance to check booking page
+            if (Math.random() < 0.5) {
+                await this.createEvent(userId, currentTime, "Booking", "GameBooking", "BookingPage", "BookNowButton")
+                currentTime += this.getRandomDelay(2, 3)
+            }
+
+            // Final profile updates (1-2 times)
+            const profileUpdates = Math.floor(Math.random() * 2) + 1
             for (let i = 0; i < profileUpdates; i++) {
                 await this.createEvent(userId, currentTime, "ProfileUpdate", "Personalization", "Profile", "UpdateProfileBtn")
-                currentTime += this.getRandomDelay(1, 3)
+                currentTime += this.getRandomDelay(2, 4)
             }
         }
     }
