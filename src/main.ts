@@ -6,7 +6,7 @@ const script = async () => {
     const app = new App()
     await app.loadConfig()
     await app.setupDb()
-    await app.generator(100, { tag: "Auth" })
+    await app.generator(100)
 }
 
 script()

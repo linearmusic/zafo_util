@@ -1,17 +1,20 @@
 import { Serializable } from "../utils/serializable"
 
 export class EventModel extends Serializable {
+    userId: number
     createdAt: number | Date
     tag: string
     group: string
     metaData: MetaData
     constructor(
+        userId: number,
         createdAt: number | Date,
         tag: string,
         group: string,
         metaData: MetaData
     ) {
         super()
+        this.userId = userId
         this.createdAt = createdAt
         this.tag = tag
         this.group = group
@@ -19,7 +22,7 @@ export class EventModel extends Serializable {
     }
 
     dto() {
-        return { createdAt: this.createdAt, tag: this.tag, group: this.group, metaData: this.metaData.serialize() }
+        return { userId: this.userId, createdAt: this.createdAt, tag: this.tag, group: this.group, metaData: this.metaData.serialize() }
     }
 
 }
