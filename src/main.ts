@@ -6,7 +6,7 @@ const script = async () => {
     const app = new App()
     await app.loadConfig()
     await app.setupDb()
-    await app.generator(100)
+    await app.generator(100) // Changed to 1 user
 }
 
 script()
