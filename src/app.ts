@@ -22,41 +22,42 @@ export class App {
         for (let userId = 1; userId <= userCount; userId++) {
             let currentTime = baseTime
 
-            // Login as returning user
+            // Initial login
             await this.createEvent(userId, currentTime, "Auth", "Login", "Home", "LoginButton")
             currentTime += this.getRandomDelay(1, 2)
 
-            // Navigate to My Bookings
-            await this.createEvent(userId, currentTime, "Engagement", "GameBooking", "MyBookings", "ViewBookings")
-            currentTime += this.getRandomDelay(1, 2)
+            // Simulate 5 cricket venue bookings over a month
+            for (let booking = 0; booking < 5; booking++) {
+                // Search for venues
+                await this.createEvent(userId, currentTime, "Search", "VenueSearch", "Home", "SearchBar")
+                currentTime += this.getRandomDelay(1, 2)
 
-            // View completed booking details
-            await this.createEvent(userId, currentTime, "Engagement", "GameBooking", "MyBookings", "ViewBookingDetails")
-            currentTime += this.getRandomDelay(1, 3)
+                // Apply cricket filter
+                await this.createEvent(userId, currentTime, "Search", "VenueSearch", "SearchResults", "FilterBySport")
+                currentTime += this.getRandomDelay(1, 2)
 
-            // Start review process
-            await this.createEvent(userId, currentTime, "Engagement", "Social", "ReviewScreen", "StartReview")
-            currentTime += this.getRandomDelay(2, 4)
+                // View venue details
+                await this.createEvent(userId, currentTime, "Engagement", "GameBooking", "VenueDetails", "ViewVenueDetails")
+                currentTime += this.getRandomDelay(2, 4)
 
-            // Random venue rating interactions (1-3 times)
-            const ratingInteractions = Math.floor(Math.random() * 3) + 1
-            for (let i = 0; i < ratingInteractions; i++) {
-                await this.createEvent(userId, currentTime, "Engagement", "Social", "ReviewScreen", "RatingInteraction")
-                currentTime += this.getRandomDelay(0.5, 1)
-            }
+                // Initiate booking
+                await this.createEvent(userId, currentTime, "Booking", "GameBooking", "VenueDetails", "BookNowButton")
+                currentTime += this.getRandomDelay(1, 2)
 
-            // Write review text
-            await this.createEvent(userId, currentTime, "Engagement", "Social", "ReviewScreen", "WriteReviewText")
-            currentTime += this.getRandomDelay(2, 5)
+                // Select time slot
+                await this.createEvent(userId, currentTime, "Booking", "GameBooking", "BookingPage", "SelectTimeSlot")
+                currentTime += this.getRandomDelay(1, 2)
 
-            // Submit review
-            await this.createEvent(userId, currentTime, "Engagement", "Social", "ReviewScreen", "SubmitReviewBtn")
-            currentTime += this.getRandomDelay(1, 2)
+                // Payment flow
+                await this.createEvent(userId, currentTime, "Payment", "Transaction", "PaymentPage", "PayNowButton")
+                currentTime += this.getRandomDelay(2, 3)
 
-            // 40% chance to view their published review
-            if (Math.random() < 0.4) {
-                await this.createEvent(userId, currentTime, "Engagement", "Social", "VenueDetails", "ViewReviews")
-                currentTime += this.getRandomDelay(1, 3)
+                // View booking confirmation
+                await this.createEvent(userId, currentTime, "Booking", "GameBooking", "MyBookings", "ViewBookingDetails")
+                currentTime += this.getRandomDelay(1, 2)
+
+                // Add ~6 days between bookings (in milliseconds)
+                currentTime += 6 * 24 * 60 * 60 * 1000 + this.getRandomDelay(1, 720) // Add 1 min to 12 hours random variation
             }
         }
     }
