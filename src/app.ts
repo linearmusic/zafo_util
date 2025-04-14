@@ -18,62 +18,54 @@ export class App {
 
     async generator(userCount: number) {
         const baseTime = Date.now()
-        const timeStep = 2 * 60 * 1000 // 2 minutes base step
 
         for (let userId = 1; userId <= userCount; userId++) {
             let currentTime = baseTime
 
-            // Login event
+            // Login
             await this.createEvent(userId, currentTime, "Auth", "Login", "Home", "LoginButton")
-            currentTime += this.getRandomDelay(1, 3)
+            currentTime += this.getRandomDelay(1, 2)
 
-            // Random number of search sessions (1-4)
-            const searchSessions = Math.floor(Math.random() * 4) + 1
-            
-            for(let session = 0; session < searchSessions; session++) {
-                // Initial search with random sport filter
-                await this.createEvent(userId, currentTime, "Search", "VenueSearch", "SearchResults", "FilterBySport")
-                currentTime += this.getRandomDelay(0.5, 2)
-
-                // Random refinements (0-4 times)
-                const refinements = Math.floor(Math.random() * 5)
-                for (let i = 0; i < refinements; i++) {
-                    const searchAction = Math.random() < 0.5 ? "RefineSearch" : "SortResults"
-                    await this.createEvent(userId, currentTime, "Search", "VenueSearch", "SearchResults", searchAction)
-                    currentTime += this.getRandomDelay(0.3, 1)
+            // Random entry point: Direct booking (30%) or Search (70%)
+            if (Math.random() < 0.7) {
+                // Search and filter flow with randomization
+                if (Math.random() < 0.8) {
+                    await this.createEvent(userId, currentTime, "Search", "VenueSearch", "Home", "SearchBar")
+                    currentTime += this.getRandomDelay(1, 3)
                 }
 
-                // View random number of venues (1-4)
-                const venuesToView = Math.floor(Math.random() * 4) + 1
+                // Maybe apply filters (60% chance)
+                if (Math.random() < 0.6) {
+                    await this.createEvent(userId, currentTime, "Search", "VenueSearch", "SearchResults", "FilterBySport")
+                    currentTime += this.getRandomDelay(1, 2)
+                }
+
+                // View 1-3 venues before booking
+                const venuesToView = Math.floor(Math.random() * 3) + 1
                 for (let i = 0; i < venuesToView; i++) {
-                    // View venue details
-                    await this.createEvent(userId, currentTime, "Engagement", "VenueSearch", "VenueDetails", "ViewVenue")
-                    currentTime += this.getRandomDelay(0.5, 3)
-
-                    // 30% chance to view venue photos
-                    if (Math.random() < 0.3) {
-                        await this.createEvent(userId, currentTime, "Engagement", "VenueSearch", "VenueDetails", "ViewPhotos")
-                        currentTime += this.getRandomDelay(0.5, 2)
-                    }
-
-                    // 20% chance to view venue reviews
-                    if (Math.random() < 0.2) {
-                        await this.createEvent(userId, currentTime, "Engagement", "VenueSearch", "VenueDetails", "ViewReviews")
-                        currentTime += this.getRandomDelay(1, 3)
-                    }
-
-                    // 40% chance to return to search
-                    if (Math.random() < 0.4) {
-                        await this.createEvent(userId, currentTime, "Search", "VenueSearch", "SearchResults", "BackToSearch")
-                        currentTime += this.getRandomDelay(0.5, 1)
-                    }
+                    await this.createEvent(userId, currentTime, "Engagement", "VenueSearch", "VenueDetails", "BookNowButton")
+                    currentTime += this.getRandomDelay(2, 4)
                 }
+            }
 
-                // 70% chance to start a new search session
-                if (Math.random() >= 0.7) break
+            // Booking and payment
+            await this.createEvent(userId, currentTime, "Booking", "GameBooking", "BookingPage", "BookNowButton")
+            currentTime += this.getRandomDelay(2, 3)
 
-                // Add delay between search sessions
-                currentTime += this.getRandomDelay(5, 15)
+            await this.createEvent(userId, currentTime, "Payment", "Transaction", "PaymentPage", "PayNowButton")
+            currentTime += this.getRandomDelay(1, 2)
+
+            // Random delay before cancellation (30min - 6 hours)
+            currentTime += this.getRandomDelay(30, 360)
+
+            // Direct cancellation
+            await this.createEvent(userId, currentTime, "Cancellation", "CancellationFlow", "MyBookings", "CancelBookingBtn")
+            currentTime += this.getRandomDelay(1, 2)
+
+            // 20% chance to search for another venue after cancellation
+            if (Math.random() < 0.2) {
+                await this.createEvent(userId, currentTime, "Search", "VenueSearch", "Home", "SearchBar")
+                currentTime += this.getRandomDelay(1, 3)
             }
         }
     }
