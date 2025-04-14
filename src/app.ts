@@ -28,36 +28,44 @@ export class App {
 
             // Simulate 5 cricket venue bookings over a month
             for (let booking = 0; booking < 5; booking++) {
-                // Search for venues
+                // Initial search from home
                 await this.createEvent(userId, currentTime, "Search", "VenueSearch", "Home", "SearchBar")
                 currentTime += this.getRandomDelay(1, 2)
 
-                // Apply cricket filter
+                // Filter sports on search results
                 await this.createEvent(userId, currentTime, "Search", "VenueSearch", "SearchResults", "FilterBySport")
                 currentTime += this.getRandomDelay(1, 2)
 
-                // View venue details
-                await this.createEvent(userId, currentTime, "Engagement", "GameBooking", "VenueDetails", "ViewVenueDetails")
+                // Engage with venue details using available button
+                await this.createEvent(userId, currentTime, "Engagement", "VenueSearch", "VenueDetails", "BookNowButton")
                 currentTime += this.getRandomDelay(2, 4)
 
-                // Initiate booking
-                await this.createEvent(userId, currentTime, "Booking", "GameBooking", "VenueDetails", "BookNowButton")
+                // Submit review if user engages (50% chance)
+                if (Math.random() < 0.5) {
+                    await this.createEvent(userId, currentTime, "Engagement", "Social", "ReviewScreen", "SubmitReviewBtn")
+                    currentTime += this.getRandomDelay(1, 2)
+                }
+
+                // Book the venue
+                await this.createEvent(userId, currentTime, "Booking", "GameBooking", "BookingPage", "BookNowButton")
                 currentTime += this.getRandomDelay(1, 2)
 
-                // Select time slot
-                await this.createEvent(userId, currentTime, "Booking", "GameBooking", "BookingPage", "SelectTimeSlot")
-                currentTime += this.getRandomDelay(1, 2)
-
-                // Payment flow
+                // Complete payment
                 await this.createEvent(userId, currentTime, "Payment", "Transaction", "PaymentPage", "PayNowButton")
                 currentTime += this.getRandomDelay(2, 3)
 
-                // View booking confirmation
-                await this.createEvent(userId, currentTime, "Booking", "GameBooking", "MyBookings", "ViewBookingDetails")
+                // Random chance (10%) of cancellation
+                if (Math.random() < 0.1) {
+                    await this.createEvent(userId, currentTime, "Cancellation", "CancellationFlow", "PaymentPage", "CancelBookingBtn")
+                    currentTime += this.getRandomDelay(1, 2)
+                }
+
+                // View bookings using available button
+                await this.createEvent(userId, currentTime, "Booking", "GameBooking", "MyBookings", "BookNowButton")
                 currentTime += this.getRandomDelay(1, 2)
 
-                // Add ~6 days between bookings (in milliseconds)
-                currentTime += 6 * 24 * 60 * 60 * 1000 + this.getRandomDelay(1, 720) // Add 1 min to 12 hours random variation
+                // Add ~6 days between bookings
+                currentTime += 6 * 24 * 60 * 60 * 1000 + this.getRandomDelay(1, 720)
             }
         }
     }
