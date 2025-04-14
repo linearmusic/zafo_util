@@ -26,36 +26,33 @@ export class App {
             await this.createEvent(userId, currentTime, "Auth", "Login", "Home", "LoginButton")
             currentTime += this.getRandomDelay(1, 2)
 
-            // Navigate to My Bookings
-            await this.createEvent(userId, currentTime, "Engagement", "GameBooking", "MyBookings", "ViewBookings")
-            currentTime += this.getRandomDelay(1, 2)
-
-            // View completed booking details
-            await this.createEvent(userId, currentTime, "Engagement", "GameBooking", "MyBookings", "ViewBookingDetails")
-            currentTime += this.getRandomDelay(1, 3)
-
-            // Start review process
-            await this.createEvent(userId, currentTime, "Engagement", "Social", "ReviewScreen", "StartReview")
+            // Go to My Bookings to find past booking
+            await this.createEvent(userId, currentTime, "Booking", "GameBooking", "MyBookings", "BookNowButton")
             currentTime += this.getRandomDelay(2, 4)
 
-            // Random venue rating interactions (1-3 times)
-            const ratingInteractions = Math.floor(Math.random() * 3) + 1
-            for (let i = 0; i < ratingInteractions; i++) {
-                await this.createEvent(userId, currentTime, "Engagement", "Social", "ReviewScreen", "RatingInteraction")
-                currentTime += this.getRandomDelay(0.5, 1)
-            }
+            // Search for the venue they played at
+            await this.createEvent(userId, currentTime, "Search", "VenueSearch", "SearchResults", "SearchBar")
+            currentTime += this.getRandomDelay(1, 2)
 
-            // Write review text
-            await this.createEvent(userId, currentTime, "Engagement", "Social", "ReviewScreen", "WriteReviewText")
-            currentTime += this.getRandomDelay(2, 5)
+            // Apply sport filter
+            await this.createEvent(userId, currentTime, "Search", "VenueSearch", "SearchResults", "FilterBySport")
+            currentTime += this.getRandomDelay(1, 2)
 
-            // Submit review
+            // Click on venue details
+            await this.createEvent(userId, currentTime, "Engagement", "VenueSearch", "VenueDetails", "BookNowButton")
+            currentTime += this.getRandomDelay(2, 3)
+
+            // Navigate to review section
+            await this.createEvent(userId, currentTime, "Engagement", "Social", "ReviewScreen", "SubmitReviewBtn")
+            currentTime += this.getRandomDelay(3, 5)
+
+            // Submit the review
             await this.createEvent(userId, currentTime, "Engagement", "Social", "ReviewScreen", "SubmitReviewBtn")
             currentTime += this.getRandomDelay(1, 2)
 
-            // 40% chance to view their published review
-            if (Math.random() < 0.4) {
-                await this.createEvent(userId, currentTime, "Engagement", "Social", "VenueDetails", "ViewReviews")
+            // 5% chance to update profile after review
+            if (Math.random() < 0.05) {
+                await this.createEvent(userId, currentTime, "ProfileUpdate", "Personalization", "Profile", "UpdateProfileBtn")
                 currentTime += this.getRandomDelay(1, 3)
             }
         }
