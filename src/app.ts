@@ -22,32 +22,40 @@ export class App {
         for (let userId = 1; userId <= userCount; userId++) {
             let currentTime = baseTime
 
-            // Signup flow
-            await this.createEvent(userId, currentTime, "Auth", "Signup", "Home", "SignupCTA")
+            // Login as returning user
+            await this.createEvent(userId, currentTime, "Auth", "Login", "Home", "LoginButton")
             currentTime += this.getRandomDelay(1, 2)
 
-            // Initial profile setup
-            await this.createEvent(userId, currentTime, "ProfileUpdate", "Personalization", "Profile", "UpdateProfileBtn")
-            currentTime += this.getRandomDelay(2, 4)
+            // Navigate to My Bookings
+            await this.createEvent(userId, currentTime, "Engagement", "GameBooking", "MyBookings", "ViewBookings")
+            currentTime += this.getRandomDelay(1, 2)
 
-            // Browse through main sections
-            await this.createEvent(userId, currentTime, "Engagement", "VenueSearch", "Home", "SearchBar")
+            // View completed booking details
+            await this.createEvent(userId, currentTime, "Engagement", "GameBooking", "MyBookings", "ViewBookingDetails")
             currentTime += this.getRandomDelay(1, 3)
 
-            // View multiple venues (2-5)
-            const venuesToView = Math.floor(Math.random() * 4) + 2
-            for (let i = 0; i < venuesToView; i++) {
-                await this.createEvent(userId, currentTime, "Search", "VenueSearch", "SearchResults", "FilterBySport")
-                currentTime += this.getRandomDelay(1, 2)
+            // Start review process
+            await this.createEvent(userId, currentTime, "Engagement", "Social", "ReviewScreen", "StartReview")
+            currentTime += this.getRandomDelay(2, 4)
 
-                await this.createEvent(userId, currentTime, "Engagement", "VenueSearch", "VenueDetails", "ViewVenue")
-                currentTime += this.getRandomDelay(2, 4)
+            // Random venue rating interactions (1-3 times)
+            const ratingInteractions = Math.floor(Math.random() * 3) + 1
+            for (let i = 0; i < ratingInteractions; i++) {
+                await this.createEvent(userId, currentTime, "Engagement", "Social", "ReviewScreen", "RatingInteraction")
+                currentTime += this.getRandomDelay(0.5, 1)
             }
 
-            // Profile updates (1-3 times)
-            const profileUpdates = Math.floor(Math.random() * 3) + 1
-            for (let i = 0; i < profileUpdates; i++) {
-                await this.createEvent(userId, currentTime, "ProfileUpdate", "Personalization", "Profile", "UpdateProfileBtn")
+            // Write review text
+            await this.createEvent(userId, currentTime, "Engagement", "Social", "ReviewScreen", "WriteReviewText")
+            currentTime += this.getRandomDelay(2, 5)
+
+            // Submit review
+            await this.createEvent(userId, currentTime, "Engagement", "Social", "ReviewScreen", "SubmitReviewBtn")
+            currentTime += this.getRandomDelay(1, 2)
+
+            // 40% chance to view their published review
+            if (Math.random() < 0.4) {
+                await this.createEvent(userId, currentTime, "Engagement", "Social", "VenueDetails", "ViewReviews")
                 currentTime += this.getRandomDelay(1, 3)
             }
         }
