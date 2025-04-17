@@ -1,0 +1,42 @@
+{
+    "scenario": "scenario1",
+    "tags": [
+        "Auth",
+        "Booking",
+        "Payment",
+        "Cancellation",
+        "Search",
+        "Engagement",
+        "ProfileUpdate"
+    ],
+    "groups": [
+        "Login",
+        "VenueSearch",
+        "GameBooking",
+        "Transaction",
+        "CancellationFlow",
+        "Social",
+        "Personalization"
+    ],
+    "pages": [
+        "Home",
+        "SearchResults",
+        "VenueDetails",
+        "BookingPage",
+        "PaymentPage",
+        "MyBookings",
+        "Profile",
+        "ReviewScreen"
+    ],
+    "elements": [
+        "LoginButton",
+        "SignupCTA",
+        "SearchBar",
+        "FilterBySport",
+        "BookNowButton",
+        "PayNowButton",
+        "CancelBookingBtn",
+        "SubmitReviewBtn",
+        "UpdateProfileBtn"
+    ]
+}

@@ -1,0 +1,15 @@
+{
+    "restartable": "rs",
+    "ignore": [
+        ".git",
+        "node_modules/**/node_modules"
+    ],
+    "verbose": false,
+    "events": {
+        "restart": "clear"
+    },
+    "watch": [
+        "src/**/*"
+    ],
+    "ext": "ts,json"
+}
